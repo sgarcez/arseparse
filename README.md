@@ -83,4 +83,4 @@ def shell(**kwargs):
 
 ```
 
-Calling `your-entrypoint config.ini shell` wil drop you in an ipython shell where `dbsession`, `settings` and `user_svc` are in scope.
+Calling `your-entrypoint config.ini shell` will drop you in an ipython shell where `dbsession`, `settings` and `user_svc` are in scope.
