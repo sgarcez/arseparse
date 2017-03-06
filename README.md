@@ -1,6 +1,6 @@
 # Arseparse
 
-Arseparse is a simple Python utility/micro framework for writing command line interfaces. It provides some fluff around argparse that covers common development scenarios.
+Arseparse is a simple Python utility/micro framework for writing command line interfaces. It provides some functionality around argparse that covers common development scenarios.
 
 ```
 from arseparse import Parser, Option
