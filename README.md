@@ -2,6 +2,12 @@
 
 Arseparse is a simple Python utility/micro framework for writing command line interfaces. It provides some functionality around argparse that covers common development scenarios.
 
+Installation:
+```
+pip install arseparse
+```
+
+Basic usage:
 ```
 from arseparse import Parser, Option
 
@@ -10,16 +16,16 @@ parser = Parser()
 
 
 # register a command that returns the square of an int that is passed in
-parser.register('square', lambda value, **kwargs: value**2, [Option('value', type=int)])
+parser.register('square', lambda value: value**2, [Option('value', type=int)])
 
 
 # register a command that simply returns a string
-parser.register('ping', lambda **kwargs: 'pong')
+parser.register('ping', lambda _: 'pong')
 
 
 # or with a decorator
 @parser.register_dec([Option('value', type=int)])
-def cube(value, **kwargs):
+def cube(value):
     return value**3
 
 
