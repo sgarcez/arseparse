@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='arseparse',
-    version='0.1',
+    version='0.1.2',
     description='Command-line app helper library',
     author='Sergio Garcez',
     author_email='garcez.sergio@gmail.com',
