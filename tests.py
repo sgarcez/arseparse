@@ -13,38 +13,53 @@ from arseparse import (
 class ParserTest(unittest.TestCase):
 
     def test_default_props(self):
-        m = Parser(bootstrap=None)
+        parser = Parser(bootstrap=None)
 
-        assert m.registry == {}
-        assert m.root_options == []
-        assert m.bootstrap is None
+        assert parser.registry == {}
+        assert parser.root_options == []
+        assert parser.bootstrap is None
 
     def test_register_and_call_no_args(self):
-        m = Parser()
+        parser = Parser()
         fn = MagicMock()
-        m.register('cmd', fn)
-        exit_code = m.run(['cmd'])
+        parser.register('cmd', fn)
+        exit_code = parser.run(['cmd'])
 
         fn.assert_called_once_with()
         assert exit_code == 0
 
-    def test_register_and_call_default_args(self):
-        def bootstrap(*args, **kwargs):
+    def test_bootstrap(self):
+        def bootstrap(**kwargs):
             return {'foo': 'bar'}
 
-        m = Parser(bootstrap=bootstrap)
+        parser = Parser(bootstrap=bootstrap)
         fn = MagicMock()
-        m.register('cmd', fn)
-        exit_code = m.run(['cmd'])
+        parser.register('cmd', fn)
+        exit_code = parser.run(['cmd'])
 
         fn.assert_called_once_with(foo='bar')
         assert exit_code == 0
 
-    def test_register_and_call_custom_args(self):
-        m = Parser()
+    def test_bootstrap_root_options(self):
+        def bootstrap(**kwargs):
+            assert 'config' in kwargs
+            return kwargs
+
+        root_options = [Option('config')]
+        parser = Parser(bootstrap=bootstrap, root_options=root_options)
+
         fn = MagicMock()
-        m.register('cmd', fn, [Option('--param1', type=str, required=True)])
-        exit_code = m.run(['cmd', '--param1=X'])
+        parser.register('cmd', fn)
+        exit_code = parser.run(['foo.ini', 'cmd'])
+
+        fn.assert_called_once_with(config='foo.ini')
+        assert exit_code == 0
+
+    def test_register_and_call_custom_args(self):
+        parser = Parser()
+        fn = MagicMock()
+        parser.register('cmd', fn, [Option('--param1', required=True)])
+        exit_code = parser.run(['cmd', '--param1=X'])
 
         fn.assert_called_once_with(param1='X')
         assert exit_code == 0
@@ -54,10 +69,11 @@ class ParserTest(unittest.TestCase):
             kwargs.update({'c': 'd'})
             return kwargs
 
-        m = Parser(bootstrap=bootstrap)
+        parser = Parser(bootstrap=bootstrap)
         fn = MagicMock()
-        m.register('cmd', fn, [Option('--param1', type=str, required=True)])
-        exit_code = m.run(['cmd', '--param1=X'])
+        parser.register(
+            'cmd', fn, [Option('--param1', type=str, required=True)])
+        exit_code = parser.run(['cmd', '--param1=X'])
 
         fn.assert_called_once_with(c='d', param1='X')
         assert exit_code == 0
@@ -67,21 +83,57 @@ class ParserTest(unittest.TestCase):
             kwargs.update({'c': 'd'})
             return kwargs
 
-        m = Parser(bootstrap=bootstrap)
+        parser = Parser(bootstrap=bootstrap)
         fn = MagicMock()
-        m.register('cmd', fn, [Option('--param1', type=str, required=False)])
-        exit_code = m.run(['cmd'])
+        parser.register(
+            'cmd', fn, [Option('--param1', type=str, required=False)])
+        exit_code = parser.run(['cmd'])
 
         fn.assert_called_once_with(c='d', param1=None)
         assert exit_code == 0
 
     def test_register_and_call_custom_args_int(self):
-        m = Parser()
+        parser = Parser()
         fn = MagicMock()
-        m.register('cmd', fn, [Option('--param1', type=int, required=True)])
-        exit_code = m.run(['cmd', '--param1=666'])
+        parser.register(
+            'cmd', fn, [Option('value', type=int)])
+        exit_code = parser.run(['cmd', '23'])
 
-        fn.assert_called_once_with(param1=666)
+        fn.assert_called_once_with(value=23)
+        assert exit_code == 0
+
+    def test_blow_up(self):
+        parser = Parser()
+
+        def fn():
+            raise ValueError()
+
+        parser.register('cmd', fn)
+        exit_code = parser.run(['cmd'])
+
+        assert exit_code == 1
+
+    def test_sys_exit(self):
+        parser = Parser()
+
+        def fn():
+            raise SystemExit()
+
+        parser.register('cmd', fn)
+        with self.assertRaises(SystemExit):
+            parser.run(['cmd'])
+
+    def test_decorator(self):
+        parser = Parser()
+
+        @parser.register_dec([Option('--value', type=int, required=True)])
+        def double(value):
+            return value + value
+
+        assert double(2) == 4
+
+        exit_code = parser.run(['double', '--value=2'])
+
         assert exit_code == 0
 
 

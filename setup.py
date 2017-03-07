@@ -10,6 +10,6 @@ setup(
     url='https://github.com/sgarcez/arseparse',
     py_modules=['arseparse'],
     setup_requires=['pytest-runner'],
-    tests_require=['mock', 'pytest'],
+    tests_require=['mock', 'pytest', 'pytest-cov'],
     keywords=['cli', 'argparse', 'command-line'],
 )
