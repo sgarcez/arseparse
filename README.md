@@ -1,5 +1,6 @@
 # Arseparse
-[![CircleCI](https://img.shields.io/circleci/project/github/sgarcez/arseparse/master.svg)](https://circleci.com/gh/sgarcez/arseparse)
+[![CircleCI](https://img.shields.io/circleci/project/github/sgarcez/arseparse/master.svg)](https://circleci.com/gh/sgarcez/arseparse) [![codecov](https://img.shields.io/codecov/c/github/sgarcez/arseparse.svg)](https://codecov.io/gh/sgarcez/arseparse/) [![PyPI version](https://badge.fury.io/py/arseparse.svg)](https://pypi.python.org/pypi/arseparse) [![PyPI format](https://img.shields.io/pypi/format/arseparse.svg)](https://pypi.python.org/pypi/arseparse)
+
 
 Arseparse is a simple Python utility/micro framework for writing command line interfaces. It provides some functionality around [argparse](https://docs.python.org/3/library/argparse.html) that covers some common scenarios.
 
@@ -16,7 +17,7 @@ from arseparse import Parser, Option
 parser = Parser()
 
 
-# register a command that returns the square of an int that is passed in
+# register a command that returns the square of an int
 parser.register('square', lambda value: value**2, [Option('value', type=int)])
 
 
@@ -47,7 +48,7 @@ root_options = [Option('config', type=str, help='path to ini file')]
 
 # this lets us process/modify the kwargs before we execute the callable.
 # we can rely on attributes resulting from root_options to be set.
-# Here config gets replaced by three objects: settings, db_session and user_svc
+# here config gets replaced by three objects: settings, db_session and user_svc
 def bootstrap(**kwargs):
     config_uri = kwargs.pop('config')
     settings = myapp.parse_app_config(config_uri)
