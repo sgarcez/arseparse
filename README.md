@@ -1,5 +1,6 @@
 # Arseparse
-[![CircleCI](https://img.shields.io/circleci/project/github/sgarcez/arseparse/master.svg)](https://circleci.com/gh/sgarcez/arseparse)
+[![CircleCI](https://img.shields.io/circleci/project/github/sgarcez/arseparse/master.svg)](https://circleci.com/gh/sgarcez/arseparse) [![codecov](https://img.shields.io/codecov/c/github/sgarcez/arseparse.svg)](https://codecov.io/gh/sgarcez/arseparse/)
+
 
 Arseparse is a simple Python utility/micro framework for writing command line interfaces. It provides some functionality around [argparse](https://docs.python.org/3/library/argparse.html) that covers some common scenarios.
 
