@@ -73,4 +73,9 @@ class Parser():
         self.registry[name] = dict(callable=callable, options=options)
 
     def register_dec(self, options=None):
-        return lambda func: self.register(func.__name__, func, options)
+        def dec(fn):
+            self.register(fn.__name__, fn, options)
+            def wrapper(*args, **kwargs):
+                return fn(*args, **kwargs)
+            return wrapper
+        return dec
