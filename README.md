@@ -17,7 +17,7 @@ from arseparse import Parser, Option
 parser = Parser()
 
 
-# register a command that returns the square of an int that is passed in
+# register a command that returns the square of an int
 parser.register('square', lambda value: value**2, [Option('value', type=int)])
 
 
@@ -48,7 +48,7 @@ root_options = [Option('config', type=str, help='path to ini file')]
 
 # this lets us process/modify the kwargs before we execute the callable.
 # we can rely on attributes resulting from root_options to be set.
-# Here config gets replaced by three objects: settings, db_session and user_svc
+# here config gets replaced by three objects: settings, db_session and user_svc
 def bootstrap(**kwargs):
     config_uri = kwargs.pop('config')
     settings = myapp.parse_app_config(config_uri)
