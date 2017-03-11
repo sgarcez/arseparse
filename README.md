@@ -4,7 +4,7 @@
 
 Arseparse is a simple Python utility/micro framework for writing command line interfaces. It provides some functionality around [argparse](https://docs.python.org/3/library/argparse.html) to dispatch a command handler and pre-process its arguments.
 
- 
+The main pattern that it can help with is the following: 
 ```
 <entrypoint> root_args... command_name command_args...
 ```
@@ -20,12 +20,12 @@ def create_user(username, secret, user_svc, **kwargs):
 ```
 Where `user_svc` argument depends on the `config` root argument. More on that later.
 
-Installation:
+####Installation:
 ```
 pip install arseparse
 ```
 
-Basic usage (without root args):
+####Basic usage (without root args):
 ```
 from arseparse import Parser, Option
 
@@ -52,6 +52,7 @@ if __name__ == '__main__':
 ```
 Execute your `entry_point` or the file directly: `your-entrypoint[.py] square 2`
 
+####Usage
 A more common scenario is to pass a config file as the first argument, parse it, create objects depend on the configuration, and pass those along to the handler.
 The `root_options` and `bootstrap` constructor args to `Parser` allow us to do this:
 ```
@@ -92,6 +93,7 @@ def print_settings(settings, **kwargs):
 ```
 You can now provide the path to a config file as the first argument: `your-entrypoint[.py] config.ini ban_user 23`
 
+####Recipes
 Another common requirement is to be able to jump into a shell where some objects have been preconfigured for us.
 Here's a simple recipe for that.
 
