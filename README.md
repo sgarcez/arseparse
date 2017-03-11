@@ -52,7 +52,7 @@ if __name__ == '__main__':
 ```
 Execute your `entry_point` or the file directly: `your-entrypoint[.py] square 2`
 
-####Usage
+####Common Usage
 A more common scenario is to pass a config file as the first argument, parse it, create objects depend on the configuration, and pass those along to the handler.
 The `root_options` and `bootstrap` constructor args to `Parser` allow us to do this:
 ```
